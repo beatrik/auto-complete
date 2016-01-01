@@ -43,10 +43,9 @@ function autocomplete() {
 function positionList() {
     var inputElem = document.getElementById("autoInput");
     var inputOffset = inputElem.getBoundingClientRect();
-    if(dropDownList.innerHTML.trim() !== "<div></div>") {
+    if(dropDownList.innerHTML.trim() !== "") {
         dropDownList.style.top = (inputOffset.top + inputOffset.height) + "px";
         dropDownList.style.left = inputOffset.left + "px";
-
         addClassName(dropDownList, "visible");
     }
 }
@@ -76,21 +75,6 @@ function hasClass(elem, className) {
     return (match) ? match[1] : null;
 }
 
-/*
- <div class="wrapper">
- <div class="left-aligned"><span style="font-weight: bold;">T</span>ata</div>
- <div class="center-aligned">tata@gmail.com</div>
- <div class="right-aligned">pacuret</div>
- <br style="clear: left;" />
- </div>
-
- <div class="flex-wrapper">
- <div class="flex-item">tatatretertretertert</div>
- <div class="flex-item">tata@gmail.com</div>
- <div class="flex-item">pacuret</div>
- </div>
- */
-
 function populateList(inputElemVal) {
     var contactList = createContactList();
 
@@ -108,19 +92,6 @@ function populateList(inputElemVal) {
             dropDownList.appendChild(flexWrapper);
         }
     }
-    /*suggestionList = document.createElement("ul");
-    for (var i = 0; i < contactList.length; i++) {
-        var suggestion = contactList[i].name;
-        var index = suggestion.toLowerCase().indexOf(inputElemVal.toLowerCase());
-        if (index >= 0) {
-            var listElem = document.createElement("li");
-            listElem.innerHTML = highlightTypedChars(suggestion, index, inputElemVal);
-            listElem.innerHTML += "&nbsp;" + contactList[i].email;
-            listElem.innerHTML += "&nbsp;" + contactList[i].address;
-            suggestionList.appendChild(listElem);
-        }
-    }
-    dropDownList.appendChild(suggestionList);*/
 }
 
 function highlightTypedChars(suggestion, index, strToHighlight) {
