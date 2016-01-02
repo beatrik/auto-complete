@@ -23,7 +23,9 @@ function autocompleteOrMove(e) {
             moveUp();
             break;
         case 13:
-            selectElement();
+            if(currentIndex >= 0) {
+                selectElement(dropDownList.childNodes[currentIndex]);
+            }
             break;
         default:
             autocomplete();
@@ -78,7 +80,6 @@ function hasClass(elem, className) {
 function populateList(inputElemVal) {
     var contactList = createContactList();
 
-    //suggestionList = document.createElement("div");
     for (var i = 0; i < contactList.length; i++) {
         //for each suggestion, create a flex wrapper with 3 flex items
         var flexWrapper = document.createElement("div");
@@ -89,6 +90,9 @@ function populateList(inputElemVal) {
             flexWrapper.appendChild(createFlexItem(highlightTypedChars(suggestion, index, inputElemVal)));
             flexWrapper.appendChild(createFlexItem(contactList[i].email));
             flexWrapper.appendChild(createFlexItem(contactList[i].address));
+
+            addMouseEventListeners(flexWrapper);
+
             dropDownList.appendChild(flexWrapper);
         }
     }
@@ -107,17 +111,29 @@ function createFlexItem(itemContent) {
     return flexItem;
 }
 
+function addMouseEventListeners(wrapper) {
+    wrapper.addEventListener("mouseover", function() {
+        addClassName(wrapper, "selected");
+    }, false);
+    wrapper.addEventListener("mouseout", function() {
+        removeClassName(wrapper, "selected");
+    }, false);
+    wrapper.addEventListener("click", function() {
+        selectElement(this);
+    }, false);
+}
+
 function moveDown() {
     //unselect current
     //select next
     if(dropDownList.childNodes.length > 0) {
         if (currentIndex === -1) {
             //first time
-            dropDownList.childNodes[0].classList.add("selected");
+            addClassName(dropDownList.childNodes[0], "selected");
             currentIndex++;
         } else if (currentIndex < dropDownList.childNodes.length - 1) {
-            dropDownList.childNodes[currentIndex].classList.remove("selected");
-            dropDownList.childNodes[currentIndex + 1].classList.add("selected");
+            removeClassName(dropDownList.childNodes[currentIndex], "selected");
+            addClassName(dropDownList.childNodes[currentIndex + 1], "selected");
             currentIndex++;
         }
     }
@@ -125,38 +141,20 @@ function moveDown() {
 
 function moveUp() {
     if(currentIndex > 0) {
-        dropDownList.childNodes[currentIndex].classList.remove("selected");
-        dropDownList.childNodes[currentIndex-1].classList.add("selected");
+        removeClassName(dropDownList.childNodes[currentIndex], "selected");
+        addClassName(dropDownList.childNodes[currentIndex-1], "selected");
         currentIndex--;
     }
 
 }
 
-function selectElement() {
-    if(currentIndex >= 0) {
+function selectElement(currentElement) {
         var inputElem = document.getElementById('autoInput');
         var tempDiv = document.createElement("div");
-        tempDiv.innerHTML = dropDownList.childNodes[currentIndex].innerHTML;
+        tempDiv.innerHTML = currentElement.innerHTML;
         //take the name only
         inputElem.value = tempDiv.childNodes[0].textContent;
         resetAndHideList();
-    }
-}
-
-//TODO: implement onclick, mouseover, mouseout
-
-/*not used now */
-function debounce(fn, delay) {
-    var timer = null;
-    return function () {
-        var context = this,
-            args = arguments;
-        clearTimeout(timer);
-
-        timer = setTimeout(function () {
-            fn.apply(context, args);
-        }, delay);
-    };
 }
 
 document.addEventListener("DOMContentLoaded", function () {
