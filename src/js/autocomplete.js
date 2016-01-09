@@ -66,7 +66,7 @@ function addClassName(elem, className) {
 
 function removeClassName(elem, className) {
     if(hasClass(elem, className)) {
-        var reg = new RegExp("(?:^| )(" + className + ")(?: |$)")
+        var reg = new RegExp("(?:^| )(" + className + ")(?: |$)");
         elem.className = elem.className.replace(reg, '');
     }
 }
@@ -91,7 +91,7 @@ function populateList(inputElemVal) {
             flexWrapper.appendChild(createFlexItem(contactList[i].email));
             flexWrapper.appendChild(createFlexItem(contactList[i].address));
 
-            addMouseEventListeners(flexWrapper);
+            addMouseEventListeners(flexWrapper, i);
 
             dropDownList.appendChild(flexWrapper);
         }
@@ -111,12 +111,19 @@ function createFlexItem(itemContent) {
     return flexItem;
 }
 
-function addMouseEventListeners(wrapper) {
+function addMouseEventListeners(wrapper, wrapperIndex) {
     wrapper.addEventListener("mouseover", function() {
+        if (currentIndex > -1) {
+            removeClassName(dropDownList.childNodes[currentIndex], "selected");
+        }
         addClassName(wrapper, "selected");
+        currentIndex = wrapperIndex;
     }, false);
     wrapper.addEventListener("mouseout", function() {
-        removeClassName(wrapper, "selected");
+        if (currentIndex > -1) {
+            removeClassName(dropDownList.childNodes[currentIndex], "selected");
+        }
+        currentIndex = -1;
     }, false);
     wrapper.addEventListener("click", function() {
         selectElement(this);
@@ -128,13 +135,14 @@ function moveDown() {
     //select next
     if(dropDownList.childNodes.length > 0) {
         if (currentIndex === -1) {
-            //first time
-            addClassName(dropDownList.childNodes[0], "selected");
+            //first element
             currentIndex++;
+            addClassName(dropDownList.childNodes[currentIndex], "selected");
+
         } else if (currentIndex < dropDownList.childNodes.length - 1) {
             removeClassName(dropDownList.childNodes[currentIndex], "selected");
-            addClassName(dropDownList.childNodes[currentIndex + 1], "selected");
             currentIndex++;
+            addClassName(dropDownList.childNodes[currentIndex], "selected");
         }
     }
 }
@@ -142,8 +150,8 @@ function moveDown() {
 function moveUp() {
     if(currentIndex > 0) {
         removeClassName(dropDownList.childNodes[currentIndex], "selected");
-        addClassName(dropDownList.childNodes[currentIndex-1], "selected");
         currentIndex--;
+        addClassName(dropDownList.childNodes[currentIndex], "selected");
     }
 
 }
