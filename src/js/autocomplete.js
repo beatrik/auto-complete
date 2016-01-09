@@ -4,7 +4,8 @@ var currentIndex = -1;
 function createDropDownList() {
     var div = document.createElement("div");
     div.className = "drop-down-list";
-    document.body.appendChild(div);
+    var headerElem = document.getElementsByTagName("header")[0];
+    headerElem.appendChild(div);
     return div;
 }
 
