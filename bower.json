@@ -1,0 +1,24 @@
+{
+  "name": "js-widgets",
+  "homepage": "https://github.com/beatrik/auto-complete",
+  "authors": [
+    "beatrik <beatrik.inga@gmail.com>"
+  ],
+  "description": "A series of JavaScript widgets",
+  "main": "tabview.html",
+  "moduleType": [
+    "globals"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.2.0"
+  }
+}
